@@ -26,47 +26,74 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   _loadChatEvent(LoadChatEvent event, Emitter<ChatState> emit) async {
     emit(state.copyWith(chatStatus: ChatStatus.loading));
 
+    final List<Message> chatMessages = [];
+
     final messages = await supabaseDatabaseRepository.getMessagesFromDatabase();
 
     final messagesFromHive = await hiveRepository.getHiveMessages();
 
-    if (messagesFromHive != null && messagesFromHive.isNotEmpty) {
+    // if (messages != null || messages!.isNotEmpty) {
+    //   if (messagesFromHive == null || messagesFromHive.isEmpty) {
+    //     hiveRepository.addMessage(messages.last);
+    //   }
+    // }
+
+    // if (messages == null || messages.isEmpty) {
+    //   chatMessages.addAll(messagesFromHive!);
+    //   chatMessages.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? 0 : 1);
+    //   // chatMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    // } else {
+    //   chatMessages.addAll(messages);
+    // }
+
+    if (messagesFromHive != null || messagesFromHive!.isNotEmpty) {
       for (Message i in messages!) {
         if (!messagesFromHive.contains(i)) {
           await hiveRepository.addMessage(i);
         }
       }
+      messagesFromHive.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      // messagesFromHive.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? 0 : 1);
+      // chatMessages.reversed;
     }
 
-    final newMessages = await hiveRepository.getHiveMessages();
-    final List<Message>? twoLastMessage = [];
-
-    if (newMessages != null && newMessages.isNotEmpty) {
-      newMessages.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? -1 : 1);
-      print(messagesFromHive);
-
-      twoLastMessage!.add(newMessages[newMessages.length - 2]);
-
-      twoLastMessage.add(newMessages.last);
+    if (messages == null || messages.isEmpty) {
+      chatMessages.addAll(messagesFromHive);
+      // chatMessages.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? 0 : 1);
+      // chatMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    } else {
+      chatMessages.addAll(messages);
     }
 
-    print(messagesFromHive);
+    // final newMessages = await hiveRepository.getHiveMessages();
+    // final List<Message>? twoLastMessage = [];
+
+    // if (newMessages != null && newMessages.isNotEmpty) {
+    //   newMessages.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? -1 : 1);
+    //   print(messagesFromHive);
+
+    //   twoLastMessage!.add(newMessages[newMessages.length - 2]);
+
+    //   twoLastMessage.add(newMessages.last);
+    // }
+
+    // print(messagesFromHive);
 
     final currentUser = supabaseDatabaseRepository.getCurrentUser();
 
+    // emit(state.copyWith(chatStatus: ChatStatus.loading));
+
+    // emit(state.copyWith(
+    //     chatStatus: ChatStatus.loaded,
+    //     messages: twoLastMessage,
+    //     currentUserId: currentUser!.id));
+
+    // await Future.delayed(Duration(seconds: 3));
     emit(state.copyWith(chatStatus: ChatStatus.loading));
-
     emit(state.copyWith(
         chatStatus: ChatStatus.loaded,
-        messages: twoLastMessage,
+        messages: chatMessages,
         currentUserId: currentUser!.id));
-
-    await Future.delayed(Duration(seconds: 3));
-
-    emit(state.copyWith(
-        chatStatus: ChatStatus.loaded,
-        messages: messages,
-        currentUserId: currentUser.id));
   }
 
   _addMessageEvent(AddMessageEvent event, Emitter<ChatState> emit) async {
@@ -80,19 +107,21 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     final randomValue = Random().nextInt(100);
 
-    final messageInHive = await hiveRepository.addMessage(Message(
-        id: randomValue.toString(),
-        userName: resultUser.displayName!,
-        profileId: currentUser!.id,
-        message: event.textMessage,
-        createdAt: DateTime.now()));
+    final dateNow = DateTime.now();
 
     final message = await supabaseDatabaseRepository.addMessage(Message(
         userName: resultUser.displayName!,
         id: randomValue.toString(),
         profileId: currentUser!.id,
         message: event.textMessage,
-        createdAt: DateTime.now()));
+        createdAt: dateNow));
+
+    final messageInHive = await hiveRepository.addMessage(Message(
+        id: randomValue.toString(),
+        userName: resultUser.displayName!,
+        profileId: currentUser!.id,
+        message: event.textMessage,
+        createdAt: dateNow));
 
     final messages = await supabaseDatabaseRepository.getMessagesFromDatabase();
 
@@ -104,13 +133,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     //   hiveRepository.addMessage(messages[messages.length - 2]);
     // }
 
-    if (messageInHive != messages!.last) {
-      hiveRepository.addMessage(messages.last);
-    }
+    // if (messageInHive != messages![messages.length - 2]) {
+    //   hiveRepository.addMessage(messages[messages.length - 2]);
+    // }
 
-    if (messageInHive != messages[messages.length - 2]) {
-      hiveRepository.addMessage(messages[messages.length - 2]);
-    }
+    // if (messageInHive != messages.last) {
+    //   hiveRepository.addMessage(messages.last);
+    // }
 
     emit(state.copyWith(
         chatStatus: ChatStatus.loaded,
@@ -120,10 +149,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   _twoSeccondsLoadEvent(
       TwoSeccondsLoadEvent event, Emitter<ChatState> emit) async {
-    final messages = supabaseDatabaseRepository.getStreamMessages();
+    final messagesStream = supabaseDatabaseRepository.getStreamMessages();
     final currentUser = supabaseDatabaseRepository.getCurrentUser();
 
-    await emit.forEach(messages, onData: (data) {
+    await emit.forEach(messagesStream, onData: (data) {
       return state.copyWith(
           chatStatus: ChatStatus.loaded,
           messages: data,

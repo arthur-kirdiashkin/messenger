@@ -75,8 +75,10 @@ class Chatpage extends StatelessWidget {
                             Text(
                               state.messages![index].userName,
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w200),
+                                color: Colors.white,
+                                // fontWeight: FontWeight.w200,
+                                fontFamily: 'Roboto'
+                              ),
                             ),
                             SizedBox(
                               height: 5,
@@ -92,7 +94,10 @@ class Chatpage extends StatelessWidget {
                                       child: Text(
                                         state.messages![index].message,
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 15),
+                                          color: Colors.white,
+                                          fontSize: 13,
+                                          fontFamily: 'Roboto',
+                                        ),
                                         // softWrap: true,
                                         softWrap: true,
                                         overflow: TextOverflow.clip,
@@ -101,8 +106,12 @@ class Chatpage extends StatelessWidget {
                                     ),
                                     Text(
                                       DateFormat.jm().format(
-                                          state.messages![index].createdAt),
-                                      style: TextStyle(color: Colors.white),
+                                        state.messages![index].createdAt,
+                                      ),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontFamily: 'Roboto'),
                                       softWrap: true,
                                     ),
                                   ],
@@ -133,8 +142,10 @@ class Chatpage extends StatelessWidget {
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.only(left: 20),
                       hintText: 'Write',
-                      hintStyle:
-                          TextStyle(color: Color.fromRGBO(255, 255, 255, 0.6)),
+                      hintStyle: TextStyle(
+                        color: Color.fromRGBO(255, 255, 255, 0.6),
+                        fontFamily: 'Helvetica'
+                      ),
                       fillColor: Color.fromARGB(39, 42, 53, 1),
                       filled: true,
                       border: OutlineInputBorder(

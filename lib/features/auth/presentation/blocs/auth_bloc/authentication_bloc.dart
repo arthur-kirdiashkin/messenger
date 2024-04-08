@@ -30,14 +30,14 @@ class AuthenticationBloc
 
     final List<HiveUser>? hiveUsers = await hiveRepository.getHiveUsers();
 
-    // final List<HiveUser>? hiveUsersFromDatabase =
-    //     await supabaseDatabaseRepository.getHiveUsersFromDatabase();
+    final List<HiveUser>? hiveUsersFromDatabase =
+        await supabaseDatabaseRepository.getHiveUsersFromDatabase();
     print(currentUser);
     // print(hiveUsers);
     // print(hiveUsersFromDatabase);
-    if (hiveUsers != null && currentUser != null) {
+    if (hiveUsersFromDatabase != null && currentUser != null) {
       emit(state.copyWith(authenticationStatus: AuthenticationStatus.loading));
-      final resultUser = hiveUsers
+      final resultUser = hiveUsersFromDatabase
           .firstWhere((element) => element.uid == currentUser.id);
       print(state.authenticationStatus);
       emit(state.copyWith(

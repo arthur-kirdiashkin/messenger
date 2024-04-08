@@ -44,13 +44,11 @@ class MyApp extends StatelessWidget {
                 supabaseDatabaseRepository: SupabaseDatabaseRepositoryImpl(),
                 hiveRepository: HiveRepositoryImpl())
               ..add(LoadChatEvent())
-              ..add(TwoSeccondsLoadEvent())
-              ),
+              ..add(TwoSeccondsLoadEvent())),
         BlocProvider(
             create: (context) => AuthenticationBloc(
                   supabaseRepository: SupabaseRepositoryImpl(),
-                  supabaseDatabaseRepository:
-                      SupabaseDatabaseRepositoryImpl(),
+                  supabaseDatabaseRepository: SupabaseDatabaseRepositoryImpl(),
                   hiveRepository: HiveRepositoryImpl(),
                 )..add(AuthenticationStarted())),
         BlocProvider(
