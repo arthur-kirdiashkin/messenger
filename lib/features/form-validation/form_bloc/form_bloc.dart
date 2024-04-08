@@ -112,11 +112,6 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
         print(updatedUser.displayName);
         await supabaseDatabaseRepository.addUser(updatedUser);
         await hiveRepository.addHiveUser(updatedUser);
-        // await databaseRepository.saveUserData(updatedUser);
-        // await prefs.setStringList('user', [
-        //   updatedUser.displayName!,
-        //   updatedUser.email!,
-        // ]);
         if (updatedUser.isVerified!) {
           emit(state.copyWith(isLoading: false, errorMessage: ""));
         } else {
@@ -151,6 +146,7 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
           uid: authUser!.id,
           isVerified: authUser.confirmationSentAt != null ? true : false,
         );
+        //  await supabaseDatabaseRepository.addUser(updatedUser);
         // await hiveRepository.addHiveUser(updatedUser);
         // await prefs.setBool('currentUser', true);
         print(authUser.confirmationSentAt);

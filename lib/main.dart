@@ -12,6 +12,7 @@ import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authenticat
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_event.dart';
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_state.dart';
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_bloc.dart';
+import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_event.dart';
 import 'package:messenger/features/auth/presentation/pages/home_page.dart';
 import 'package:messenger/features/auth/presentation/pages/welcome_page.dart';
 import 'package:messenger/features/form-validation/form_bloc/form_bloc.dart';
@@ -36,77 +37,72 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
+    return MultiBlocProvider(
       providers: [
-        RepositoryProvider(create: (context) => HiveRepositoryImpl()),
-        RepositoryProvider(create: (context) => SupabaseRepositoryImpl()),
-        RepositoryProvider(
-            create: (context) => SupabaseDatabaseRepositoryImpl()),
-      ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-              create: (context) => ChatBloc(
+        BlocProvider(
+            create: (context) => ChatBloc(
+                supabaseDatabaseRepository: SupabaseDatabaseRepositoryImpl(),
+                hiveRepository: HiveRepositoryImpl())
+              ..add(LoadChatEvent())
+              ..add(TwoSeccondsLoadEvent())
+              ),
+        BlocProvider(
+            create: (context) => AuthenticationBloc(
+                  supabaseRepository: SupabaseRepositoryImpl(),
                   supabaseDatabaseRepository:
-                      SupabaseDatabaseRepositoryImpl())),
-          BlocProvider(
-              create: (context) => AuthenticationBloc(
-                    supabaseRepository: SupabaseRepositoryImpl(),
-                    supabaseDatabaseRepository:
-                        SupabaseDatabaseRepositoryImpl(),
-                    hiveRepository: HiveRepositoryImpl(),
-                  )..add(AuthenticationStarted())),
-          BlocProvider(
-            create: (context) => FormBloc(
-              hiveRepository: HiveRepositoryImpl(),
-              supabaseDatabaseRepository: SupabaseDatabaseRepositoryImpl(),
-              supabaseRepository: SupabaseRepositoryImpl(),
-            ),
-          )
-        ],
-        child: MaterialApp(
-          theme: ThemeData(
-              scaffoldBackgroundColor: Color.fromRGBO(41, 47, 63, 1),
-              appBarTheme: AppBarTheme(
-                  backgroundColor: Color.fromRGBO(41, 47, 63, 1),
-                  iconTheme: IconThemeData(color: Colors.white))),
-          home: Scaffold(
-            body: MultiBlocListener(
-              listeners: [
-                BlocListener<AuthenticationBloc, AuthenticationState>(
-                  listener: (context, state) {
-                    if (state.authenticationStatus ==
-                        AuthenticationStatus.success) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                        (Route<dynamic> route) => false,
-                      );
-                    }
-                  },
-                ),
-                BlocListener<AuthenticationBloc, AuthenticationState>(
-                  listener: (context, state) {
-                    if (state.authenticationStatus ==
-                        AuthenticationStatus.notSucess) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => WelcomePage()),
-                        (Route<dynamic> route) => false,
-                      );
-                    }
-                  },
-                )
-              ],
-              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
+                      SupabaseDatabaseRepositoryImpl(),
+                  hiveRepository: HiveRepositoryImpl(),
+                )..add(AuthenticationStarted())),
+        BlocProvider(
+          create: (context) => FormBloc(
+            hiveRepository: HiveRepositoryImpl(),
+            supabaseDatabaseRepository: SupabaseDatabaseRepositoryImpl(),
+            supabaseRepository: SupabaseRepositoryImpl(),
+          ),
+        )
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+            scaffoldBackgroundColor: Color.fromRGBO(41, 47, 63, 1),
+            appBarTheme: AppBarTheme(
+                backgroundColor: Color.fromRGBO(41, 47, 63, 1),
+                iconTheme: IconThemeData(color: Colors.white))),
+        home: Scaffold(
+          body: MultiBlocListener(
+            listeners: [
+              BlocListener<AuthenticationBloc, AuthenticationState>(
+                listener: (context, state) {
                   if (state.authenticationStatus ==
-                      AuthenticationStatus.loading) {
-                    return Center(
-                      child: CircularProgressIndicator(),
+                      AuthenticationStatus.success) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false,
                     );
                   }
-                  return SizedBox.shrink();
                 },
               ),
+              BlocListener<AuthenticationBloc, AuthenticationState>(
+                listener: (context, state) {
+                  if (state.authenticationStatus ==
+                      AuthenticationStatus.notSucess) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => WelcomePage()),
+                      (Route<dynamic> route) => false,
+                    );
+                  }
+                },
+              )
+            ],
+            child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+                if (state.authenticationStatus ==
+                    AuthenticationStatus.loading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return SizedBox.shrink();
+              },
             ),
           ),
         ),

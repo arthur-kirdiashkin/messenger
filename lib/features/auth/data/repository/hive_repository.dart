@@ -25,7 +25,7 @@ class HiveRepositoryImpl implements HiveRepository {
 
     userBox.put(hiveUser.uid, hiveUser);
 
-    print(hiveUser);
+    // print(hiveUser);
     return hiveUser;
   }
 
@@ -39,7 +39,7 @@ class HiveRepositoryImpl implements HiveRepository {
         users.add(i);
       }
     }
-    print(userBox.values);
+    // print(userBox.values);
     return users;
   }
 
@@ -51,6 +51,7 @@ class HiveRepositoryImpl implements HiveRepository {
 
   @override
   Future<Box> openBoxMessages() async {
+    // Hive.deleteBoxFromDisk('HiveMessages');
     return await Hive.openBox('HiveMessages');
   }
 

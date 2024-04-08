@@ -1,4 +1,3 @@
-import 'package:messenger/features/auth/data/models/chat.dart';
 import 'package:messenger/features/auth/data/models/hive_user.dart';
 import 'package:messenger/features/auth/data/models/message.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -6,8 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseDatabaseService {
   final client = Supabase.instance.client;
 
-  User? getCurrentUser()  {
-    return  client.auth.currentUser;
+  User? getCurrentUser() {
+    return client.auth.currentUser;
   }
 
   Future<HiveUser?> addUser(HiveUser user) async {
@@ -22,7 +21,7 @@ class SupabaseDatabaseService {
       final user = HiveUser.fromJson(i);
       databaseUsers.add(user);
     }
-    print(databaseUsers);
+    // print(databaseUsers);
 
     return databaseUsers;
   }
@@ -44,5 +43,12 @@ class SupabaseDatabaseService {
     }
 
     return messages;
+  }
+
+  Stream<List<Message>?> getStreamMessages() {
+    final messagesStream = client.from('message').stream(primaryKey: [
+      'created_at'
+    ]).map((maps) => maps.map((map) => Message.fromJson(map)).toList());
+    return messagesStream;
   }
 }

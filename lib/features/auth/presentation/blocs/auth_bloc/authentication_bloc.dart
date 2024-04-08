@@ -30,14 +30,14 @@ class AuthenticationBloc
 
     final List<HiveUser>? hiveUsers = await hiveRepository.getHiveUsers();
 
-    final List<HiveUser>? hiveUsersFromDatabase =
-        await supabaseDatabaseRepository.getHiveUsersFromDatabase();
+    // final List<HiveUser>? hiveUsersFromDatabase =
+    //     await supabaseDatabaseRepository.getHiveUsersFromDatabase();
     print(currentUser);
-    print(hiveUsers);
-    print(hiveUsersFromDatabase);
+    // print(hiveUsers);
+    // print(hiveUsersFromDatabase);
     if (hiveUsers != null && currentUser != null) {
       emit(state.copyWith(authenticationStatus: AuthenticationStatus.loading));
-      final resultUser = hiveUsersFromDatabase!
+      final resultUser = hiveUsers
           .firstWhere((element) => element.uid == currentUser.id);
       print(state.authenticationStatus);
       emit(state.copyWith(
@@ -45,7 +45,6 @@ class AuthenticationBloc
           hiveUser: resultUser));
       print(state.authenticationStatus);
     } else {
-      emit(state.copyWith(authenticationStatus: AuthenticationStatus.loading));
       emit(
           state.copyWith(authenticationStatus: AuthenticationStatus.notSucess));
     }
@@ -54,7 +53,7 @@ class AuthenticationBloc
   _authenticationSignedOut(
       AuthenticationSignedOut event, Emitter<AuthenticationState> emit) async {
     await supabaseRepository.signOut();
-     emit(state.copyWith(authenticationStatus: AuthenticationStatus.loading));
+    emit(state.copyWith(authenticationStatus: AuthenticationStatus.loading));
     emit(state.copyWith(authenticationStatus: AuthenticationStatus.notSucess));
   }
 }

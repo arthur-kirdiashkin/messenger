@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_event.dart';
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_state.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Chatpage extends StatelessWidget {
   final messageController = TextEditingController();
@@ -15,7 +13,6 @@ class Chatpage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var client = Supabase.instance.client;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -29,21 +26,25 @@ class Chatpage extends StatelessWidget {
           BlocBuilder<ChatBloc, ChatState>(
             builder: (context, state) {
               if (state.chatStatus == ChatStatus.loading) {
-                return Center(
-                  child: CircularProgressIndicator(),
+                return Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 );
               } else if (state.chatStatus == ChatStatus.loaded) {
                 if (state.messages!.isEmpty || state.messages == null) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Add message',
-                          style: TextStyle(color: Colors.white),
+                  return Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            'Add message',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 }
                 return Expanded(
@@ -80,19 +81,31 @@ class Chatpage extends StatelessWidget {
                             SizedBox(
                               height: 5,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Column(
                               children: [
-                                Text(
-                                  state.messages![index].message,
-                                  style: TextStyle(color: Colors.white),
-                                  softWrap: true,
-                                  maxLines: 20,
-                                ),
-                                Text(
-                                  DateFormat.jm()
-                                      .format(state.messages![index].createdAt),
-                                  style: TextStyle(color: Colors.white),
+                                Row(
+                                  // mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        state.messages![index].message,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 15),
+                                        // softWrap: true,
+                                        softWrap: true,
+                                        overflow: TextOverflow.clip,
+                                        maxLines: 20,
+                                      ),
+                                    ),
+                                    Text(
+                                      DateFormat.jm().format(
+                                          state.messages![index].createdAt),
+                                      style: TextStyle(color: Colors.white),
+                                      softWrap: true,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

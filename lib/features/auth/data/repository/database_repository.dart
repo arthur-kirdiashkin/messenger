@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class SupabaseDatabaseRepository {
 
+  Stream<List<Message>?> getStreamMessages();
+
   User? getCurrentUser();
 
   Future<Message?> addMessage(Message message);
@@ -44,6 +46,11 @@ class SupabaseDatabaseRepositoryImpl implements SupabaseDatabaseRepository{
   @override
   User? getCurrentUser() {
     return supabaseDatabaseService.getCurrentUser();
+  }
+  
+  @override
+  Stream<List<Message>?> getStreamMessages() {
+    return supabaseDatabaseService.getStreamMessages();
   }
 
 }
