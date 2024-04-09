@@ -3,8 +3,8 @@ import 'package:messenger/features/auth/data/models/hive_user.dart';
 import 'package:messenger/features/auth/data/repository/database_repository.dart';
 import 'package:messenger/features/auth/data/repository/hive_repository.dart';
 import 'package:messenger/features/auth/data/repository/supabase_repository.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_event.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_state.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_event.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
