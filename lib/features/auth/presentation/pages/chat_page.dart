@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_bloc.dart';
@@ -15,7 +13,7 @@ class Chatpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Chat',
           style: TextStyle(color: Colors.white),
         ),
@@ -26,14 +24,14 @@ class Chatpage extends StatelessWidget {
           BlocBuilder<ChatBloc, ChatState>(
             builder: (context, state) {
               if (state.chatStatus == ChatStatus.loading) {
-                return Expanded(
+                return const Expanded(
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 );
               } else if (state.chatStatus == ChatStatus.loaded) {
                 if (state.messages!.isEmpty || state.messages == null) {
-                  return Expanded(
+                  return const Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -57,48 +55,43 @@ class Chatpage extends StatelessWidget {
                       return Container(
                         margin: state.currentUserId ==
                                 state.messages![index].profileId
-                            ? EdgeInsets.only(
+                            ? const EdgeInsets.only(
                                 top: 8, bottom: 8, left: 80, right: 35)
-                            : EdgeInsets.only(
+                            : const EdgeInsets.only(
                                 top: 8, bottom: 8, right: 80, left: 35),
                         decoration: BoxDecoration(
                             color: state.currentUserId ==
                                     state.messages![index].profileId
-                                ? Color.fromRGBO(39, 42, 53, 1)
-                                : Color.fromRGBO(55, 62, 78, 1),
+                                ? const Color.fromRGBO(39, 42, 53, 1)
+                                : const Color.fromRGBO(55, 62, 78, 1),
                             borderRadius: BorderRadius.circular(20)),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               state.messages![index].userName,
-                              style: TextStyle(
-                                color: Colors.white,
-                                // fontWeight: FontWeight.w200,
-                                fontFamily: 'Roboto'
-                              ),
+                              style: const TextStyle(
+                                  color: Colors.white, fontFamily: 'Roboto'),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Column(
                               children: [
                                 Row(
-                                  // mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Text(
                                         state.messages![index].message,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,
                                           fontFamily: 'Roboto',
                                         ),
-                                        // softWrap: true,
                                         softWrap: true,
                                         overflow: TextOverflow.clip,
                                         maxLines: 20,
@@ -108,7 +101,7 @@ class Chatpage extends StatelessWidget {
                                       DateFormat.jm().format(
                                         state.messages![index].createdAt,
                                       ),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontFamily: 'Roboto'),
@@ -125,11 +118,11 @@ class Chatpage extends StatelessWidget {
                   ),
                 );
               }
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             },
           ),
           Padding(
-            padding: EdgeInsets.only(left: 25, top: 20, bottom: 20),
+            padding: const EdgeInsets.only(left: 25, top: 20, bottom: 20),
             child: Row(
               children: [
                 SizedBox(
@@ -140,13 +133,12 @@ class Chatpage extends StatelessWidget {
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 20),
+                      contentPadding: const EdgeInsets.only(left: 20),
                       hintText: 'Write',
-                      hintStyle: TextStyle(
-                        color: Color.fromRGBO(255, 255, 255, 0.6),
-                        fontFamily: 'Helvetica'
-                      ),
-                      fillColor: Color.fromARGB(39, 42, 53, 1),
+                      hintStyle: const TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 0.6),
+                          fontFamily: 'Helvetica'),
+                      fillColor: const Color.fromARGB(39, 42, 53, 1),
                       filled: true,
                       border: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -157,15 +149,17 @@ class Chatpage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    context.read<ChatBloc>().add(
-                        AddMessageEvent(textMessage: messageController.text));
-                    messageController.clear();
+                    if (messageController.text.trim().isNotEmpty) {
+                      context.read<ChatBloc>().add(
+                          AddMessageEvent(textMessage: messageController.text));
+                      messageController.clear();
+                    }
                   },
                   child: Container(
                       width: 47,
                       height: 47,
                       decoration: BoxDecoration(
-                          color: Color.fromRGBO(55, 62, 78, 1),
+                          color: const Color.fromRGBO(55, 62, 78, 1),
                           borderRadius: BorderRadius.circular(10)),
                       child: Image.asset('assets/Union.png')),
                 )

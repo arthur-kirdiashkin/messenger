@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:messenger/features/auth/presentation/pages/sign_in_page.dart';
-import 'package:messenger/features/auth/presentation/pages/sign_up_page.dart';
+import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_page.dart';
+import 'package:messenger/features/auth/presentation/pages/sign_up/sign_up_page.dart';
 
 class WelcomePage extends StatelessWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+  const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class WelcomePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Welcome',
+          const Text('Welcome',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -28,14 +27,14 @@ class WelcomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SignInPage()),
+                  MaterialPageRoute(builder: (context) => const SignInPage()),
                 );
               },
               style: ButtonStyle(
                   foregroundColor:
                       MaterialStateProperty.all<Color>(Colors.white),
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromRGBO(122, 129, 148, 1)),
+                      const Color.fromRGBO(122, 129, 148, 1)),
                   side: MaterialStateProperty.all<BorderSide>(BorderSide.none)),
               child: const Text('Get Started'),
             ),
@@ -51,7 +50,7 @@ class WelcomePage extends StatelessWidget {
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromRGBO(55, 62, 78, 1)),
+                      const Color.fromRGBO(55, 62, 78, 1)),
                   side: MaterialStateProperty.all<BorderSide>(BorderSide.none)),
               child: const Text(
                 "Sign Up",

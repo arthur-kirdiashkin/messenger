@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_bloc.dart';
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_event.dart';
@@ -15,20 +14,20 @@ class SettingsPage extends StatelessWidget {
       listener: (context, state) {
         if (state.authenticationStatus == AuthenticationStatus.notSucess) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => WelcomePage()),
+            MaterialPageRoute(builder: (context) => const WelcomePage()),
             (Route<dynamic> route) => false,
           );
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Settings',
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
         ),
-        body: Column(
+        body: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LogOutButton(),

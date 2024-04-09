@@ -1,10 +1,6 @@
-import 'package:async/async.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:messenger/features/auth/data/repository/database_repository.dart';
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_bloc.dart';
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_state.dart';
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_bloc.dart';
@@ -34,7 +30,7 @@ class HomePage extends StatelessWidget {
                     )),
               ],
               leading: Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 child: ProfilePicture(
                   name: state.hiveUser!.displayName!,
                   radius: 10,
@@ -44,14 +40,14 @@ class HomePage extends StatelessWidget {
               ),
               title: Text(
                 '${state.hiveUser!.displayName}',
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: GestureDetector(
                     onTap: () {
                       context.read<ChatBloc>()
@@ -60,7 +56,7 @@ class HomePage extends StatelessWidget {
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => Chatpage()));
                     },
-                    child: Card(
+                    child: const Card(
                         color: Color.fromRGBO(68, 73, 85, 1),
                         child: ListTile(
                           title: Center(
@@ -76,7 +72,7 @@ class HomePage extends StatelessWidget {
             ),
           );
         }
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       },
     );
   }

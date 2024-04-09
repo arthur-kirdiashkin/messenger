@@ -5,8 +5,6 @@ import 'package:messenger/features/auth/data/repository/hive_repository.dart';
 import 'package:messenger/features/auth/data/repository/supabase_repository.dart';
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_event.dart';
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -18,7 +16,7 @@ class AuthenticationBloc
     required this.supabaseDatabaseRepository,
     required this.hiveRepository,
     required this.supabaseRepository,
-  }) : super(AuthenticationState()) {
+  }) : super(const AuthenticationState()) {
     on<AuthenticationStarted>(_authenticationStarted);
     on<AuthenticationSignedOut>(_authenticationSignedOut);
   }
@@ -32,17 +30,15 @@ class AuthenticationBloc
 
     final List<HiveUser>? hiveUsersFromDatabase =
         await supabaseDatabaseRepository.getHiveUsersFromDatabase();
-    print('currentUser: $currentUser');
-    // print(hiveUsers);
-    // print(hiveUsersFromDatabase);
-    if (hiveUsersFromDatabase != null && hiveUsersFromDatabase.isNotEmpty && currentUser != null) {
-      final resultUser =
-          hiveUsersFromDatabase.firstWhere((element) => element.uid == currentUser.id);
-      print(state.authenticationStatus);
+    if (hiveUsersFromDatabase != null &&
+        hiveUsersFromDatabase.isNotEmpty &&
+        currentUser != null) {
+      final resultUser = hiveUsersFromDatabase
+          .firstWhere((element) => element.uid == currentUser.id);
+
       emit(state.copyWith(
           authenticationStatus: AuthenticationStatus.success,
           hiveUser: resultUser));
-      print(state.authenticationStatus);
     } else {
       emit(
           state.copyWith(authenticationStatus: AuthenticationStatus.notSucess));

@@ -18,5 +18,5 @@ class AuthenticationSignedOut extends AuthenticationEvent {
 }
 
 class LoginWithBiometricEvent extends AuthenticationEvent {
-  LoginWithBiometricEvent();
+  const LoginWithBiometricEvent();
 }

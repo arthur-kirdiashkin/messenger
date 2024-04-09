@@ -12,7 +12,6 @@ import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authenticat
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_event.dart';
 import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_state.dart';
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_bloc.dart';
-import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_event.dart';
 import 'package:messenger/features/auth/presentation/pages/home_page.dart';
 import 'package:messenger/features/auth/presentation/pages/welcome_page.dart';
 import 'package:messenger/features/form-validation/form_bloc/form_bloc.dart';
@@ -60,8 +59,8 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           theme: ThemeData(
-              scaffoldBackgroundColor: Color.fromRGBO(41, 47, 63, 1),
-              appBarTheme: AppBarTheme(
+              scaffoldBackgroundColor: const Color.fromRGBO(41, 47, 63, 1),
+              appBarTheme: const AppBarTheme(
                   backgroundColor: Color.fromRGBO(41, 47, 63, 1),
                   iconTheme: IconThemeData(color: Colors.white))),
           home: Scaffold(
@@ -70,13 +69,13 @@ class MyApp extends StatelessWidget {
                 if (state.authenticationStatus ==
                     AuthenticationStatus.success) {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 }
                 if (state.authenticationStatus ==
                     AuthenticationStatus.notSucess) {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => WelcomePage()),
+                    MaterialPageRoute(builder: (context) => const WelcomePage()),
                   );
                 }
               },
@@ -84,11 +83,11 @@ class MyApp extends StatelessWidget {
                 builder: (context, state) {
                   if (state.authenticationStatus ==
                       AuthenticationStatus.loading) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 },
               ),
             ),

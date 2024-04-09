@@ -11,7 +11,6 @@ class SupabaseDatabaseService {
 
   Future<HiveUser?> addUser(HiveUser user) async {
     await client.from('users').insert(user.toJson());
-    print(user);
   }
 
   Future<List<HiveUser>?> getHiveUsersFromDatabase() async {

@@ -1,5 +1,3 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messenger/features/auth/data/models/hive_user.dart';
 import 'package:messenger/features/auth/data/repository/database_repository.dart';
@@ -7,7 +5,6 @@ import 'package:messenger/features/auth/data/repository/hive_repository.dart';
 import 'package:messenger/features/auth/data/repository/supabase_repository.dart';
 import 'package:messenger/features/form-validation/form_bloc/form_event.dart';
 import 'package:messenger/features/form-validation/form_bloc/form_state.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -15,7 +12,6 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
   final SupabaseRepository supabaseRepository;
   final SupabaseDatabaseRepository supabaseDatabaseRepository;
   final HiveRepository hiveRepository;
-  // final DatabaseRepository databaseRepository;
   late SharedPreferences prefs;
   FormBloc({
     required this.hiveRepository,
@@ -104,12 +100,10 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
     if (state.isFormValid) {
       try {
         User? authUser = await supabaseRepository.signUp(user);
-        print(authUser!.lastSignInAt);
         HiveUser updatedUser = user.copyWith(
-          uid: authUser.id,
+          uid: authUser!.id,
           isVerified: authUser.lastSignInAt != null ? true : false,
         );
-        print(updatedUser.displayName);
         await supabaseDatabaseRepository.addUser(updatedUser);
         await hiveRepository.addHiveUser(updatedUser);
         if (updatedUser.isVerified!) {
@@ -146,10 +140,6 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
           uid: authUser!.id,
           isVerified: authUser.confirmationSentAt != null ? true : false,
         );
-        //  await supabaseDatabaseRepository.addUser(updatedUser);
-        // await hiveRepository.addHiveUser(updatedUser);
-        // await prefs.setBool('currentUser', true);
-        print(authUser.confirmationSentAt);
         if (updatedUser.isVerified!) {
           emit(state.copyWith(isLoading: false, errorMessage: ""));
         } else {

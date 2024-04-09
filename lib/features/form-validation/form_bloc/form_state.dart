@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 
 class FormsState extends Equatable {
@@ -35,7 +34,6 @@ class FormsState extends Equatable {
       bool? isPasswordValid,
       bool? isFormValid,
       bool? isLoading,
-      int? age,
       String? errorMessage,
       bool? isNameValid,
       bool? isAgeValid,
