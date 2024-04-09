@@ -21,7 +21,7 @@ class Chatpage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          BlocBuilder<ChatBloc, ChatState>(
+          Expanded(child: BlocBuilder<ChatBloc, ChatState>(
             builder: (context, state) {
               if (state.chatStatus == ChatStatus.loading) {
                 return const Expanded(
@@ -29,98 +29,99 @@ class Chatpage extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   ),
                 );
-              } else if (state.chatStatus == ChatStatus.loaded) {
+              }
+              if (state.chatStatus == ChatStatus.loaded) {
                 if (state.messages!.isEmpty || state.messages == null) {
-                  return const Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Text(
-                            'Add message',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                  return const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Add message',
+                          style: TextStyle(color: Colors.white),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
                 }
-                return Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    // reverse: true,
-                    itemCount: state.messages!.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: state.currentUserId ==
-                                state.messages![index].profileId
-                            ? const EdgeInsets.only(
-                                top: 8, bottom: 8, left: 80, right: 35)
-                            : const EdgeInsets.only(
-                                top: 8, bottom: 8, right: 80, left: 35),
-                        decoration: BoxDecoration(
-                            color: state.currentUserId ==
-                                    state.messages![index].profileId
-                                ? const Color.fromRGBO(39, 42, 53, 1)
-                                : const Color.fromRGBO(55, 62, 78, 1),
-                            borderRadius: BorderRadius.circular(20)),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 25, vertical: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              state.messages![index].userName,
-                              style: const TextStyle(
-                                  color: Colors.white, fontFamily: 'Roboto'),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        state.messages![index].message,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 13,
-                                          fontFamily: 'Roboto',
-                                        ),
-                                        softWrap: true,
-                                        overflow: TextOverflow.clip,
-                                        maxLines: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      DateFormat.jm().format(
-                                        state.messages![index].createdAt,
-                                      ),
+                return ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: state.messages!.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: state.currentUserId ==
+                              state.messages![index].profileId
+                          ? const EdgeInsets.only(
+                              top: 8, bottom: 8, left: 80, right: 35)
+                          : const EdgeInsets.only(
+                              top: 8, bottom: 8, right: 80, left: 35),
+                      decoration: BoxDecoration(
+                          color: state.currentUserId ==
+                                  state.messages![index].profileId
+                              ? const Color.fromRGBO(39, 42, 53, 1)
+                              : const Color.fromRGBO(55, 62, 78, 1),
+                          borderRadius: BorderRadius.circular(20)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            state.messages![index].userName,
+                            style: const TextStyle(
+                                color: Colors.white, fontFamily: 'Roboto'),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      state.messages![index].message,
                                       style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontFamily: 'Roboto'),
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontFamily: 'Roboto',
+                                      ),
                                       softWrap: true,
+                                      overflow: TextOverflow.clip,
+                                      maxLines: 20,
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                                  ),
+                                  Text(
+                                    DateFormat.jm().format(
+                                      state.messages![index].createdAt,
+                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: 'Roboto'),
+                                    softWrap: true,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }
+              if (state.chatStatus == ChatStatus.error) {
+                return Center(
+                  child: Text('${state.errorMessage}'),
                 );
               }
               return const SizedBox.shrink();
             },
-          ),
+          )),
           Padding(
             padding: const EdgeInsets.only(left: 25, top: 20, bottom: 20),
             child: Row(

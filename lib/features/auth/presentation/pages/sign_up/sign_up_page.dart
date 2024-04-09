@@ -24,10 +24,7 @@ class SignUpPage extends StatelessWidget {
                   builder: (context) => ErrorDialogSignUp(
                         errorMessage: state.errorMessage,
                       ));
-            } 
-            // else if (state.isFormValid && !state.isLoading) {
-            //   context.read<FormBloc>().add(const FormSucceeded());
-            // }
+            }
           },
         )
       ],

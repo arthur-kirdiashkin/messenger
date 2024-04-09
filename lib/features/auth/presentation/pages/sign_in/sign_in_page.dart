@@ -11,7 +11,6 @@ import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widge
 import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widgets/sign_in_navigate.dart';
 import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widgets/submit_button.dart';
 import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_bloc.dart';
-import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_event.dart';
 import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_state.dart';
 
 class SignInPage extends StatelessWidget {
@@ -44,7 +43,6 @@ class SignInPage extends StatelessWidget {
             if (state.authenticationStatus == AuthenticationStatus.success) {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const HomePage()));
-              // (Route<dynamic> route) => false);
             }
           },
         ),
