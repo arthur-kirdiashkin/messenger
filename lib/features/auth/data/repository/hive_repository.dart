@@ -25,7 +25,6 @@ class HiveRepositoryImpl implements HiveRepository {
 
     userBox.put(hiveUser.uid, hiveUser);
 
-    // print(hiveUser);
     return hiveUser;
   }
 

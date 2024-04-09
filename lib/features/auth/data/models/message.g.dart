@@ -17,7 +17,6 @@ class MessageAdapter extends TypeAdapter<Message> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Message(
-      isMine: fields[4] as bool?,
       id: fields[0] as String?,
       userName: fields[5] as String,
       profileId: fields[1] as String,
@@ -29,7 +28,7 @@ class MessageAdapter extends TypeAdapter<Message> {
   @override
   void write(BinaryWriter writer, Message obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,8 +37,6 @@ class MessageAdapter extends TypeAdapter<Message> {
       ..write(obj.message)
       ..writeByte(3)
       ..write(obj.createdAt)
-      ..writeByte(4)
-      ..write(obj.isMine)
       ..writeByte(5)
       ..write(obj.userName);
   }

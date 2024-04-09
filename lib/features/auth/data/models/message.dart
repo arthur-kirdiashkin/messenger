@@ -16,14 +16,10 @@ class Message extends HiveObject {
   @HiveField(3)
   final DateTime createdAt;
 
-  @HiveField(4)
-  final bool? isMine;
-
   @HiveField(5)
   final String userName;
 
   Message({
-    this.isMine,
     this.id,
     required this.userName,
     required this.profileId,
@@ -38,20 +34,19 @@ class Message extends HiveObject {
       'profile_id': profileId,
       'message': message,
       'created_at': createdAt.toIso8601String(),
-      'is_mine': isMine,
     };
   }
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
       userName: json['user_name'],
-        id: json['id'],
-        profileId: json['profile_id'],
-        message: json['message'],
-        createdAt: DateTime.parse(
-          json['created_at'],
-        ),
-        isMine: json['is_mine']);
+      id: json['id'],
+      profileId: json['profile_id'],
+      message: json['message'],
+      createdAt: DateTime.parse(
+        json['created_at'],
+      ),
+    );
   }
 
   Message copyWith({
@@ -60,11 +55,9 @@ class Message extends HiveObject {
     String? profileId,
     String? message,
     DateTime? createdAt,
-    final bool? isMine,
   }) {
     return Message(
       userName: userName ?? this.userName,
-      isMine: isMine ?? this.isMine,
       id: id ?? this.id,
       profileId: profileId ?? this.profileId,
       message: message ?? this.message,
