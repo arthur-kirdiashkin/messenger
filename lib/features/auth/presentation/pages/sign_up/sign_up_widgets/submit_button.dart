@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_bloc.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_event.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_state.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_bloc.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_event.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_state.dart';
 
 class SubmitButtonSignUp extends StatelessWidget {
   const SubmitButtonSignUp({super.key});
@@ -17,7 +17,7 @@ class SubmitButtonSignUp extends StatelessWidget {
             onPressed: !state.isFormValid
                 ? () => context
                     .read<FormBloc>()
-                    .add(const FormSubmitted(value: Status.signUp))
+                    .add(const FormSubmitted(value: FormStatus.signUp))
                 : null,
             style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.white),

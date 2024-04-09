@@ -6,7 +6,7 @@ import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authenticat
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_event.dart';
 import 'package:messenger/features/auth/presentation/pages/chat_page.dart';
-import 'package:messenger/features/auth/presentation/pages/settings_page.dart';
+import 'package:messenger/features/auth/presentation/pages/settings/settings_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

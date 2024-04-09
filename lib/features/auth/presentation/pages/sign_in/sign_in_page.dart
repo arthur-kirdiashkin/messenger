@@ -10,9 +10,9 @@ import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widge
 import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widgets/password_field.dart';
 import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widgets/sign_in_navigate.dart';
 import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widgets/submit_button.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_bloc.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_event.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_state.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_bloc.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_event.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_state.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});

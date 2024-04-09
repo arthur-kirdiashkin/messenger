@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_bloc.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_event.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_state.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_bloc.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_event.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_state.dart';
 
 class PasswordFieldSignUp extends StatelessWidget {
   const PasswordFieldSignUp({super.key});

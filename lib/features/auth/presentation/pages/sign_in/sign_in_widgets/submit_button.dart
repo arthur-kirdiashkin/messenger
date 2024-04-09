@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_bloc.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_event.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_state.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_bloc.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_event.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_state.dart';
 
 class SubmitButtonSignIn extends StatelessWidget {
   const SubmitButtonSignIn({super.key});
@@ -20,7 +20,7 @@ class SubmitButtonSignIn extends StatelessWidget {
                   onPressed: !state.isFormValid
                       ? () => context
                           .read<FormBloc>()
-                          .add(const FormSubmitted(value: Status.signIn))
+                          .add(const FormSubmitted(value: FormStatus.signIn))
                       : null,
                   style: ButtonStyle(
                       foregroundColor:
