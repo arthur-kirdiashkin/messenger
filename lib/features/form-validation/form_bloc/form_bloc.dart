@@ -22,7 +22,6 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
     on<PasswordChanged>(_onPasswordChanged);
     on<NameChanged>(_onNameChanged);
     on<FormSubmitted>(_onFormSubmitted);
-    on<FormSucceeded>(_onFormSucceeded);
   }
   final RegExp _emailRegExp = RegExp(
     r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
@@ -45,6 +44,9 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
 
   _onEmailChanged(EmailChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
+      isFormValid: false,
+      isFormValidateFailed: false,
+      errorMessage: "",
       email: event.email,
       isEmailValid: _isEmailValid(event.email),
     ));
@@ -52,6 +54,8 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
 
   _onPasswordChanged(PasswordChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
+      isFormValidateFailed: false,
+      errorMessage: "",
       password: event.password,
       isPasswordValid: _isPasswordValid(event.password),
     ));
@@ -59,6 +63,8 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
 
   _onNameChanged(NameChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
+      isFormValidateFailed: false,
+      errorMessage: "",
       displayName: event.displayName,
       isNameValid: _isNameValid(event.displayName),
     ));
@@ -147,9 +153,5 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
       emit(state.copyWith(
           isLoading: false, isFormValid: false, isFormValidateFailed: true));
     }
-  }
-
-  _onFormSucceeded(FormSucceeded event, Emitter<FormsState> emit) {
-    emit(state.copyWith(isFormSuccessful: true));
   }
 }

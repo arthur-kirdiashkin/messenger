@@ -11,6 +11,7 @@ import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widge
 import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widgets/sign_in_navigate.dart';
 import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_widgets/submit_button.dart';
 import 'package:messenger/features/form-validation/form_bloc/form_bloc.dart';
+import 'package:messenger/features/form-validation/form_bloc/form_event.dart';
 import 'package:messenger/features/form-validation/form_bloc/form_state.dart';
 
 class SignInPage extends StatelessWidget {
@@ -28,10 +29,12 @@ class SignInPage extends StatelessWidget {
                   context: context,
                   builder: (context) =>
                       ErrorDialogSignIn(errorMessage: state.errorMessage));
-            } else if (state.isFormValidateFailed) {
+            }
+            if (state.isFormValidateFailed) {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text("Please fill the data correctly!")));
-            } else if (state.isFormValid && !state.isLoading) {
+            }
+            if (state.isFormValid && !state.isLoading) {
               context.read<AuthenticationBloc>().add(AuthenticationStarted());
             }
           },
@@ -39,9 +42,9 @@ class SignInPage extends StatelessWidget {
         BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             if (state.authenticationStatus == AuthenticationStatus.success) {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                  (Route<dynamic> route) => false);
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const HomePage()));
+              // (Route<dynamic> route) => false);
             }
           },
         ),

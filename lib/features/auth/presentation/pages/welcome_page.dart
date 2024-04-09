@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_bloc.dart';
+import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authentication_event.dart';
 import 'package:messenger/features/auth/presentation/pages/sign_in/sign_in_page.dart';
 import 'package:messenger/features/auth/presentation/pages/sign_up/sign_up_page.dart';
 

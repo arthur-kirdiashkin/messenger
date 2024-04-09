@@ -11,46 +11,45 @@ class FormsState extends Equatable {
   final bool isFormValidateFailed;
   final bool isLoading;
   final String errorMessage;
-  final bool isFormSuccessful;
 
-  FormsState(
-      {this.email = '"example@gmail.com"',
-      this.password = '',
-      this.isEmailValid = true,
-      this.isPasswordValid = true,
-      this.isFormValid = false,
-      this.isLoading = false,
-      this.errorMessage = "",
-      this.isNameValid = true,
-      this.isFormValidateFailed = false,
-      this.displayName,
-      this.isFormSuccessful = false});
+  FormsState({
+    this.email = "example@gmail.com",
+    this.password = '',
+    this.isEmailValid = true,
+    this.isPasswordValid = true,
+    this.isFormValid = false,
+    this.isLoading = false,
+    this.errorMessage = "",
+    this.isNameValid = true,
+    this.isFormValidateFailed = false,
+    this.displayName,
+  });
 
-  FormsState copyWith(
-      {String? email,
-      String? password,
-      String? displayName,
-      bool? isEmailValid,
-      bool? isPasswordValid,
-      bool? isFormValid,
-      bool? isLoading,
-      String? errorMessage,
-      bool? isNameValid,
-      bool? isAgeValid,
-      bool? isFormValidateFailed,
-      bool? isFormSuccessful}) {
+  FormsState copyWith({
+    String? email,
+    String? password,
+    String? displayName,
+    bool? isEmailValid,
+    bool? isPasswordValid,
+    bool? isFormValid,
+    bool? isLoading,
+    String? errorMessage,
+    bool? isNameValid,
+    bool? isAgeValid,
+    bool? isFormValidateFailed,
+  }) {
     return FormsState(
-        email: email ?? this.email,
-        password: password ?? this.password,
-        isEmailValid: isEmailValid ?? this.isEmailValid,
-        isPasswordValid: isPasswordValid ?? this.isPasswordValid,
-        isFormValid: isFormValid ?? this.isFormValid,
-        isLoading: isLoading ?? this.isLoading,
-        errorMessage: errorMessage ?? this.errorMessage,
-        isNameValid: isNameValid ?? this.isNameValid,
-        displayName: displayName ?? this.displayName,
-        isFormValidateFailed: isFormValidateFailed ?? this.isFormValidateFailed,
-        isFormSuccessful: isFormSuccessful ?? this.isFormSuccessful);
+      email: email ?? this.email,
+      password: password ?? this.password,
+      isEmailValid: isEmailValid ?? this.isEmailValid,
+      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
+      isFormValid: isFormValid ?? this.isFormValid,
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage ?? this.errorMessage,
+      isNameValid: isNameValid ?? this.isNameValid,
+      displayName: displayName ?? this.displayName,
+      isFormValidateFailed: isFormValidateFailed ?? this.isFormValidateFailed,
+    );
   }
 
   @override
@@ -65,6 +64,5 @@ class FormsState extends Equatable {
         isNameValid,
         displayName,
         isFormValidateFailed,
-        isFormSuccessful,
       ];
 }

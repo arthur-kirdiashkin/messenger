@@ -13,9 +13,9 @@ class SettingsPage extends StatelessWidget {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.authenticationStatus == AuthenticationStatus.notSucess) {
-          Navigator.of(context).pushAndRemoveUntil(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const WelcomePage()),
-            (Route<dynamic> route) => false,
+            // (Route<dynamic> route) => false,
           );
         }
       },
