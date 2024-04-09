@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+enum FormStatus { signIn, signUp }
+
 class FormsState extends Equatable {
   final String email;
   final String? displayName;
@@ -11,9 +13,12 @@ class FormsState extends Equatable {
   final bool isFormValidateFailed;
   final bool isLoading;
   final String errorMessage;
+  final FormStatus? formStatus;
+
 
   FormsState({
-    this.email = "example@gmail.com",
+    this.formStatus,
+    this.email = "",
     this.password = '',
     this.isEmailValid = true,
     this.isPasswordValid = true,
@@ -37,8 +42,10 @@ class FormsState extends Equatable {
     bool? isNameValid,
     bool? isAgeValid,
     bool? isFormValidateFailed,
+    FormStatus? formStatus,
   }) {
     return FormsState(
+      formStatus: formStatus ?? this.formStatus,
       email: email ?? this.email,
       password: password ?? this.password,
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -64,5 +71,6 @@ class FormsState extends Equatable {
         isNameValid,
         displayName,
         isFormValidateFailed,
+        formStatus,
       ];
 }

@@ -15,8 +15,10 @@ class ChatState extends Equatable {
   final List<Message>? messages;
   final List<HiveUser>? users;
   final String? currentUserId;
+  final String? errorMessage;
 
   const ChatState({
+    this.errorMessage,
     this.currentUserId,
      this.chatStatus,
      this.users,
@@ -28,12 +30,14 @@ class ChatState extends Equatable {
     final List<Message>? messages,
     final List<HiveUser>? users,
     final ChatStatus? chatStatus,
+    final String? errorMessage
   }) {
     return ChatState(
       currentUserId: currentUserId ?? this.currentUserId,
       chatStatus: chatStatus ?? this.chatStatus,
       users: users ?? this.users,
       messages: messages ?? this.messages,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
@@ -44,5 +48,6 @@ class ChatState extends Equatable {
         messages,
         users,
         chatStatus,
+        errorMessage,
       ];
 }

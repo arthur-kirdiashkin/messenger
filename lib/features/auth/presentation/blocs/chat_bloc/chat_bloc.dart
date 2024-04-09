@@ -16,7 +16,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       : super(const ChatState()) {
     on<LoadChatEvent>(_loadChatEvent);
     on<AddMessageEvent>(_addMessageEvent);
-    on<StreamLoadEvent>(_twoSeccondsLoadEvent);
+    on<StreamLoadEvent>(_streamLoadEvent);
   }
 
   _loadChatEvent(LoadChatEvent event, Emitter<ChatState> emit) async {
@@ -45,7 +45,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     final currentUser = supabaseDatabaseRepository.getCurrentUser();
 
-    emit(state.copyWith(chatStatus: ChatStatus.loading));
     emit(state.copyWith(
         chatStatus: ChatStatus.loaded,
         messages: chatMessages,
@@ -87,7 +86,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         currentUserId: currentUser.id));
   }
 
-  _twoSeccondsLoadEvent(StreamLoadEvent event, Emitter<ChatState> emit) async {
+  _streamLoadEvent(StreamLoadEvent event, Emitter<ChatState> emit) async {
     final messagesStream = supabaseDatabaseRepository.getStreamMessages();
     final currentUser = supabaseDatabaseRepository.getCurrentUser();
 
@@ -112,6 +111,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             messages: data,
             currentUserId: currentUser!.id);
       }
-    }).catchError(onError);
+    }).onError((error, stackTrace) => emit(state.copyWith(
+        chatStatus: ChatStatus.error, errorMessage: error.toString())));
   }
 }

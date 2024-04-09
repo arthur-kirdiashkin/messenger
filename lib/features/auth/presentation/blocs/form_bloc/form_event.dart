@@ -1,7 +1,8 @@
 
 import 'package:equatable/equatable.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_state.dart';
 
-enum Status { signIn, signUp }
+
 
 abstract class FormEvent extends Equatable {
   const FormEvent();
@@ -43,7 +44,7 @@ class AgeChanged extends FormEvent {
 }
 
 class FormSubmitted extends FormEvent {
-  final Status value;
+  final FormStatus value;
   const FormSubmitted({required this.value});
 
   @override

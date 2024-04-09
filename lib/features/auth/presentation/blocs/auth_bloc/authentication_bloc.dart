@@ -26,7 +26,7 @@ class AuthenticationBloc
 
     final currentUser = supabaseDatabaseRepository.getCurrentUser();
 
-    final List<HiveUser>? hiveUsers = await hiveRepository.getHiveUsers();
+    // final List<HiveUser>? hiveUsers = await hiveRepository.getHiveUsers();
 
     final List<HiveUser>? hiveUsersFromDatabase =
         await supabaseDatabaseRepository.getHiveUsersFromDatabase();

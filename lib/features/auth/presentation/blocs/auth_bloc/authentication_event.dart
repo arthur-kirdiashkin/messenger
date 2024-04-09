@@ -16,7 +16,3 @@ class AuthenticationSignedOut extends AuthenticationEvent {
   @override
   List<Object> get props => [];
 }
-
-class LoginWithBiometricEvent extends AuthenticationEvent {
-  const LoginWithBiometricEvent();
-}

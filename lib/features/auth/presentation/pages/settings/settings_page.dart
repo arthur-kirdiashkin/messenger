@@ -16,7 +16,6 @@ class SettingsPage extends StatelessWidget {
         if (state.authenticationStatus == AuthenticationStatus.notSucess) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const WelcomePage()),
-            // (Route<dynamic> route) => false,
           );
         }
       },
@@ -38,5 +37,3 @@ class SettingsPage extends StatelessWidget {
     );
   }
 }
-
-

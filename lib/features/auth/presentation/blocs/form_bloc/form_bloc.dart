@@ -5,6 +5,7 @@ import 'package:messenger/features/auth/data/repository/hive_repository.dart';
 import 'package:messenger/features/auth/data/repository/supabase_repository.dart';
 import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_event.dart';
 import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_state.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -23,41 +24,21 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
     on<NameChanged>(_onNameChanged);
     on<FormSubmitted>(_onFormSubmitted);
   }
-  final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-  );
-  final RegExp _passwordRegExp = RegExp(
-    r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
-  );
-
-  bool _isEmailValid(String email) {
-    return _emailRegExp.hasMatch(email);
-  }
-
-  bool _isPasswordValid(String password) {
-    return _passwordRegExp.hasMatch(password);
-  }
-
-  bool _isNameValid(String? displayName) {
-    return displayName!.isNotEmpty;
-  }
 
   _onEmailChanged(EmailChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
       isFormValid: false,
-      isFormValidateFailed: false,
       errorMessage: "",
       email: event.email,
-      isEmailValid: _isEmailValid(event.email),
+      isEmailValid: FormUtils.isEmailValid(event.email),
     ));
   }
 
   _onPasswordChanged(PasswordChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
-      isFormValidateFailed: false,
       errorMessage: "",
       password: event.password,
-      isPasswordValid: _isPasswordValid(event.password),
+      isPasswordValid: FormUtils.isPasswordValid(event.password),
     ));
   }
 
@@ -66,7 +47,7 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
       isFormValidateFailed: false,
       errorMessage: "",
       displayName: event.displayName,
-      isNameValid: _isNameValid(event.displayName),
+      isNameValid: FormUtils.isNameValid(event.displayName),
     ));
   }
 
@@ -77,9 +58,9 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
         displayName: state.displayName,
         uid: '');
 
-    if (event.value == Status.signUp) {
+    if (event.value == FormStatus.signUp) {
       await _updateUIAndSignUp(event, emit, user);
-    } else if (event.value == Status.signIn) {
+    } else if (event.value == FormStatus.signIn) {
       await _authenticateUser(event, emit, user);
     }
   }
@@ -89,9 +70,9 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
     prefs = await SharedPreferences.getInstance();
     emit(state.copyWith(
         errorMessage: "",
-        isFormValid: _isPasswordValid(state.password) &&
-            _isEmailValid(state.email) &&
-            _isNameValid(state.displayName),
+        isFormValid: FormUtils.isPasswordValid(state.password) &&
+            FormUtils.isEmailValid(state.email) &&
+            FormUtils.isNameValid(state.displayName),
         isLoading: true));
     if (state.isFormValid) {
       try {
@@ -103,7 +84,8 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
         await supabaseDatabaseRepository.addUser(updatedUser);
         await hiveRepository.addHiveUser(updatedUser);
         if (updatedUser.isVerified!) {
-          emit(state.copyWith(isLoading: false, errorMessage: ""));
+          emit(state.copyWith(
+              isLoading: state.isLoading, errorMessage: state.errorMessage));
         } else {
           emit(state.copyWith(
               isFormValid: false,
@@ -113,7 +95,9 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
         }
       } on Exception catch (e) {
         emit(state.copyWith(
-            isLoading: false, errorMessage: e.toString(), isFormValid: false));
+            isLoading: state.isLoading,
+            errorMessage: e.toString(),
+            isFormValid: false));
       }
     } else {
       emit(state.copyWith(
@@ -126,8 +110,8 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
     prefs = await SharedPreferences.getInstance();
     emit(state.copyWith(
         errorMessage: "",
-        isFormValid:
-            _isPasswordValid(state.password) && _isEmailValid(state.email),
+        isFormValid: FormUtils.isPasswordValid(state.password) &&
+            FormUtils.isEmailValid(state.email),
         isLoading: true));
     if (state.isFormValid) {
       try {
