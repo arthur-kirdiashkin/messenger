@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:messenger/features/auth/data/models/hive_user.dart';
 import 'package:messenger/features/auth/data/models/message.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 enum ChatStatus {
   initial,
@@ -16,7 +16,7 @@ class ChatState extends Equatable {
   final List<HiveUser>? users;
   final String? currentUserId;
 
-  ChatState({
+  const ChatState({
     this.currentUserId,
      this.chatStatus,
      this.users,
@@ -38,7 +38,7 @@ class ChatState extends Equatable {
   }
 
   @override
-  // TODO: implement props
+
   List<Object?> get props => [
         currentUserId,
         messages,
