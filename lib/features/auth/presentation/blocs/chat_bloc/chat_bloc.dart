@@ -20,7 +20,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       : super(ChatState()) {
     on<LoadChatEvent>(_loadChatEvent);
     on<AddMessageEvent>(_addMessageEvent);
-    on<TwoSeccondsLoadEvent>(_twoSeccondsLoadEvent);
+    on<StreamLoadEvent>(_twoSeccondsLoadEvent);
   }
 
   _loadChatEvent(LoadChatEvent event, Emitter<ChatState> emit) async {
@@ -32,20 +32,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     final messagesFromHive = await hiveRepository.getHiveMessages();
 
-    // if (messages != null || messages!.isNotEmpty) {
-    //   if (messagesFromHive == null || messagesFromHive.isEmpty) {
-    //     hiveRepository.addMessage(messages.last);
-    //   }
-    // }
-
-    // if (messages == null || messages.isEmpty) {
-    //   chatMessages.addAll(messagesFromHive!);
-    //   chatMessages.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? 0 : 1);
-    //   // chatMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
-    // } else {
-    //   chatMessages.addAll(messages);
-    // }
-
     if (messagesFromHive != null || messagesFromHive!.isNotEmpty) {
       for (Message i in messages!) {
         if (!messagesFromHive.contains(i)) {
@@ -53,46 +39,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         }
       }
       messagesFromHive.sort((a, b) => a.createdAt.compareTo(b.createdAt));
-      // messagesFromHive.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? 0 : 1);
-      // chatMessages.reversed;
     }
 
     if (messages == null || messages.isEmpty) {
       chatMessages.addAll(messagesFromHive);
-      // chatMessages.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? 0 : 1);
-      // chatMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
     } else {
       chatMessages.addAll(messages);
     }
 
-    // final newMessages = await hiveRepository.getHiveMessages();
-    // final List<Message>? twoLastMessage = [];
-
-    // if (newMessages != null && newMessages.isNotEmpty) {
-    //   newMessages.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? -1 : 1);
-    //   print(messagesFromHive);
-
-    //   twoLastMessage!.add(newMessages[newMessages.length - 2]);
-
-    //   twoLastMessage.add(newMessages.last);
-    // }
-
-    // print(messagesFromHive);
-
     final currentUser = supabaseDatabaseRepository.getCurrentUser();
 
-    // emit(state.copyWith(chatStatus: ChatStatus.loading));
-
-    // emit(state.copyWith(
-    //     chatStatus: ChatStatus.loaded,
-    //     messages: twoLastMessage,
-    //     currentUserId: currentUser!.id));
-
-    // await Future.delayed(Duration(seconds: 3));
     emit(state.copyWith(chatStatus: ChatStatus.loading));
     emit(state.copyWith(
         chatStatus: ChatStatus.loaded,
-        messages: chatMessages,
+        messages: messages,
         currentUserId: currentUser!.id));
   }
 
@@ -109,37 +69,21 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     final dateNow = DateTime.now();
 
-    final message = await supabaseDatabaseRepository.addMessage(Message(
+     await supabaseDatabaseRepository.addMessage(Message(
         userName: resultUser.displayName!,
         id: randomValue.toString(),
         profileId: currentUser!.id,
         message: event.textMessage,
         createdAt: dateNow));
 
-    final messageInHive = await hiveRepository.addMessage(Message(
+     await hiveRepository.addMessage(Message(
         id: randomValue.toString(),
         userName: resultUser.displayName!,
-        profileId: currentUser!.id,
+        profileId: currentUser.id,
         message: event.textMessage,
         createdAt: dateNow));
 
     final messages = await supabaseDatabaseRepository.getMessagesFromDatabase();
-
-    // if (messageInHive!.userName != messages!.last.userName) {
-    //   hiveRepository.addMessage(messages.last);
-    // }
-
-    // if (messageInHive.userName != messages[messages.length - 2].userName) {
-    //   hiveRepository.addMessage(messages[messages.length - 2]);
-    // }
-
-    // if (messageInHive != messages![messages.length - 2]) {
-    //   hiveRepository.addMessage(messages[messages.length - 2]);
-    // }
-
-    // if (messageInHive != messages.last) {
-    //   hiveRepository.addMessage(messages.last);
-    // }
 
     emit(state.copyWith(
         chatStatus: ChatStatus.loaded,
@@ -147,16 +91,44 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         currentUserId: currentUser.id));
   }
 
-  _twoSeccondsLoadEvent(
-      TwoSeccondsLoadEvent event, Emitter<ChatState> emit) async {
+  _twoSeccondsLoadEvent(StreamLoadEvent event, Emitter<ChatState> emit) async {
     final messagesStream = supabaseDatabaseRepository.getStreamMessages();
     final currentUser = supabaseDatabaseRepository.getCurrentUser();
 
+    final messages = await supabaseDatabaseRepository.getMessagesFromDatabase();
+
+    final messagesFromHive = await hiveRepository.getHiveMessages();
+
+    if (messagesFromHive != null || messagesFromHive!.isNotEmpty) {
+      for (Message i in messages!) {
+        if (!messagesFromHive.contains(i)) {
+          await hiveRepository.addMessage(i);
+        }
+      }
+      messagesFromHive.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      // messagesFromHive.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? 0 : 1);
+      // chatMessages.reversed;
+    }
+
     await emit.forEach(messagesStream, onData: (data) {
-      return state.copyWith(
-          chatStatus: ChatStatus.loaded,
-          messages: data,
-          currentUserId: currentUser!.id);
+      if (data == null || data.isEmpty) {
+        messagesFromHive.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        return state.copyWith(
+            chatStatus: ChatStatus.loaded,
+            messages: messagesFromHive,
+            currentUserId: currentUser!.id);
+      } else {
+        for (Message i in data) {
+          if (!messagesFromHive.contains(i)) {
+            hiveRepository.addMessage(i);
+          }
+        }
+
+        return state.copyWith(
+            chatStatus: ChatStatus.loaded,
+            messages: data,
+            currentUserId: currentUser!.id);
+      }
     }).catchError(onError);
   }
 }

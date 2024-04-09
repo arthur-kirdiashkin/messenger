@@ -32,13 +32,12 @@ class AuthenticationBloc
 
     final List<HiveUser>? hiveUsersFromDatabase =
         await supabaseDatabaseRepository.getHiveUsersFromDatabase();
-    print(currentUser);
+    print('currentUser: $currentUser');
     // print(hiveUsers);
     // print(hiveUsersFromDatabase);
-    if (hiveUsersFromDatabase != null && currentUser != null) {
-      emit(state.copyWith(authenticationStatus: AuthenticationStatus.loading));
-      final resultUser = hiveUsersFromDatabase
-          .firstWhere((element) => element.uid == currentUser.id);
+    if (hiveUsersFromDatabase != null && hiveUsersFromDatabase.isNotEmpty && currentUser != null) {
+      final resultUser =
+          hiveUsersFromDatabase.firstWhere((element) => element.uid == currentUser.id);
       print(state.authenticationStatus);
       emit(state.copyWith(
           authenticationStatus: AuthenticationStatus.success,
@@ -53,7 +52,7 @@ class AuthenticationBloc
   _authenticationSignedOut(
       AuthenticationSignedOut event, Emitter<AuthenticationState> emit) async {
     await supabaseRepository.signOut();
-    emit(state.copyWith(authenticationStatus: AuthenticationStatus.loading));
+
     emit(state.copyWith(authenticationStatus: AuthenticationStatus.notSucess));
   }
 }

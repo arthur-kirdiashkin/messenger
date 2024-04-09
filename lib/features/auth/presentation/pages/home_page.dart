@@ -54,6 +54,9 @@ class HomePage extends StatelessWidget {
                   padding: EdgeInsets.all(10),
                   child: GestureDetector(
                     onTap: () {
+                      context.read<ChatBloc>()
+                        ..add(LoadChatEvent())
+                        ..add(StreamLoadEvent());
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => Chatpage()));
                     },

@@ -39,7 +39,7 @@ class HiveRepositoryImpl implements HiveRepository {
         users.add(i);
       }
     }
-    // print(userBox.values);
+    print('Users: $users');
     return users;
   }
 

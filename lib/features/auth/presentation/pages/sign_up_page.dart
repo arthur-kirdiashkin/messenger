@@ -27,6 +27,11 @@ class SignUpPage extends StatelessWidget {
         )
       ],
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(onPressed: () {
+            Navigator.of(context).pop();
+          }, icon: Icon(Icons.arrow_back), ),
+        ),
           body: Center(
         child: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [

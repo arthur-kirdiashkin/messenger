@@ -26,7 +26,7 @@ class AddMessageEvent extends ChatEvent {
       ];
 }
 
-class TwoSeccondsLoadEvent extends ChatEvent {
+class StreamLoadEvent extends ChatEvent {
   @override
   // TODO: implement props
   List<Object?> get props => [];
