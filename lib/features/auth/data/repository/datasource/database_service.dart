@@ -20,14 +20,12 @@ class SupabaseDatabaseService {
       final user = HiveUser.fromJson(i);
       databaseUsers.add(user);
     }
-    // print(databaseUsers);
 
     return databaseUsers;
   }
 
   Future<Message?> addMessage(Message message) async {
     await client.from('message').insert(message.toJson());
-    // print(message);
   }
 
   Future<List<Message>?> getMessagesFromDatabase() async {

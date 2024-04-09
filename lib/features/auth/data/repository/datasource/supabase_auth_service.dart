@@ -1,7 +1,7 @@
 import 'package:messenger/features/auth/data/models/hive_user.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseService {
+class SupabaseAuthService {
   final client = Supabase.instance.client;
 
   Future<User?> signUp(HiveUser user) async {

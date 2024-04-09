@@ -1,6 +1,6 @@
 import 'package:messenger/features/auth/data/models/hive_user.dart';
 
-import 'package:messenger/features/auth/data/repository/datasource/supabase_service.dart';
+import 'package:messenger/features/auth/data/repository/datasource/supabase_auth_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class SupabaseRepository {
@@ -12,7 +12,7 @@ abstract class SupabaseRepository {
 }
 
 class SupabaseRepositoryImpl implements SupabaseRepository {
-  SupabaseService supabaseService = SupabaseService();
+  SupabaseAuthService supabaseService = SupabaseAuthService();
 
   @override
   Future<User?> signIn(HiveUser user) {
