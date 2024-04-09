@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:messenger/common/constants.dart';
-import 'package:messenger/features/auth/data/models/chat.dart';
 import 'package:messenger/features/auth/data/models/hive_user.dart';
 import 'package:messenger/features/auth/data/models/message.dart';
 import 'package:messenger/features/auth/data/repository/database_repository.dart';
@@ -14,7 +13,7 @@ import 'package:messenger/features/auth/presentation/blocs/auth_bloc/authenticat
 import 'package:messenger/features/auth/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:messenger/features/auth/presentation/pages/home_page.dart';
 import 'package:messenger/features/auth/presentation/pages/welcome_page.dart';
-import 'package:messenger/features/form-validation/form_bloc/form_bloc.dart';
+import 'package:messenger/features/auth/presentation/blocs/form_bloc/form_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -26,7 +25,7 @@ Future<void> main() async {
   );
   Hive.registerAdapter<HiveUser>(HiveUserAdapter());
   Hive.registerAdapter<Message>(MessageAdapter());
-  Hive.registerAdapter<Chat>(ChatAdapter());
+ 
 
   runApp(const MyApp());
 }
