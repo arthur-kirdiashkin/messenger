@@ -45,10 +45,6 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
 
   _onEmailChanged(EmailChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
-      isFormSuccessful: false,
-      isFormValid: false,
-      isFormValidateFailed: false,
-      errorMessage: "",
       email: event.email,
       isEmailValid: _isEmailValid(event.email),
     ));
@@ -56,9 +52,6 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
 
   _onPasswordChanged(PasswordChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
-      isFormSuccessful: false,
-      isFormValidateFailed: false,
-      errorMessage: "",
       password: event.password,
       isPasswordValid: _isPasswordValid(event.password),
     ));
@@ -66,9 +59,6 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
 
   _onNameChanged(NameChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
-      isFormSuccessful: false,
-      isFormValidateFailed: false,
-      errorMessage: "",
       displayName: event.displayName,
       isNameValid: _isNameValid(event.displayName),
     ));
