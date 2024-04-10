@@ -24,10 +24,8 @@ class Chatpage extends StatelessWidget {
           Expanded(child: BlocBuilder<ChatBloc, ChatState>(
             builder: (context, state) {
               if (state.chatStatus == ChatStatus.loading) {
-                return const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               }
               if (state.chatStatus == ChatStatus.loaded) {

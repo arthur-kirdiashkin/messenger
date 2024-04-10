@@ -48,20 +48,4 @@ class Message extends HiveObject {
       ),
     );
   }
-
-  Message copyWith({
-    String? userName,
-    String? id,
-    String? profileId,
-    String? message,
-    DateTime? createdAt,
-  }) {
-    return Message(
-      userName: userName ?? this.userName,
-      id: id ?? this.id,
-      profileId: profileId ?? this.profileId,
-      message: message ?? this.message,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
 }
