@@ -28,6 +28,7 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
   _onEmailChanged(EmailChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
       isFormValid: false,
+       isFormValidateFailed: false,
       errorMessage: "",
       email: event.email,
       isEmailValid: FormUtils.isEmailValid(event.email),
@@ -37,6 +38,7 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
   _onPasswordChanged(PasswordChanged event, Emitter<FormsState> emit) {
     emit(state.copyWith(
       errorMessage: "",
+       isFormValidateFailed: false,
       password: event.password,
       isPasswordValid: FormUtils.isPasswordValid(event.password),
     ));
@@ -85,7 +87,9 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
         await hiveRepository.addHiveUser(updatedUser);
         if (updatedUser.isVerified!) {
           emit(state.copyWith(
-              isLoading: state.isLoading, errorMessage: state.errorMessage));
+            isLoading: false,
+            errorMessage: '',
+          ));
         } else {
           emit(state.copyWith(
               isFormValid: false,
@@ -95,7 +99,7 @@ class FormBloc extends Bloc<FormEvent, FormsState> {
         }
       } on Exception catch (e) {
         emit(state.copyWith(
-            isLoading: state.isLoading,
+            isLoading: false,
             errorMessage: e.toString(),
             isFormValid: false));
       }
